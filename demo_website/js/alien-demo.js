@@ -7,6 +7,14 @@ var state = "stop";
 var disconnect = false;
 var connect = false;
 
+function togglePlayCtrl () {
+  if ( $("#play-ctrl").is( ":hidden" ) ) {
+    $("#play-ctrl").children().slideDown();
+  } else {
+    $("#play-ctrl").children().slideUp();
+  }
+}
+
 function toggleDisable() {
   $('#conn').prop("disabled",!$('#conn').prop("disabled"))
 }
@@ -44,14 +52,14 @@ function checkState() {
 }
 
 function showConnect() {
-  $('#conn').html('<span class="glyphicon glyphicon-flash">Connect</span>'); 
-  $('#conn').attr("class","btn btn-success");
+  $('#conn').html('<span class="glyphicon glyphicon-flash"></span>Connect'); 
+  $('#conn').attr("class","btn btn-success btn-lg");
   $('#conn').attr("onclick","javascript:doGET('connect');");
 }
 
 function showDisconnect() {
-  $('#conn').html('<span class="glyphicon glyphicon-remove">Disconnect</span>');
-  $('#conn').attr("class","btn btn-danger");
+  $('#conn').html('<span class="glyphicon glyphicon-remove"></span>Disconnect');
+  $('#conn').attr("class","btn btn-danger btn-lg");
   $('#conn').attr("onclick","javascript:doGET('disconnect');");
 }
 
@@ -62,6 +70,7 @@ $(document).ready(function () {
               if (s=='3' && state=="self-start") {  // link up -> pause
                 vlc.playlist.togglePause();
                 ////toggleDisable();
+                togglePlayCtrl();
                 enableConn();
                 showDisconnect();
                 infoWindow.setAttribute("class", "label label-success");
@@ -93,6 +102,7 @@ $(document).ready(function () {
                 checkState();
               } else if (s=="6" && disconnect==true) {  // disconnecting -> waiting for player error
                 vlc.playlist.stop();
+                togglePlayCtrl();
                 showConnect();
                 ////toggleDisable();
                 enableConn();

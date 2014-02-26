@@ -59,32 +59,34 @@
             <div class="col-lg-2 col-sm-12"></div>
             <div class="col-lg-8 col-sm-12 text-center">
 
-              <!-- <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
-                id="alienPlayer"
-                autoplay="no"
-                toolbar="no"
-                loop="no"
-                width="640" height="360"
-                target="rtsp://10.0.0.4:8554/stay.mp3" /> --> <!-- CHANGE TO bunny.ts BEFORE DEMO-->
               <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
                 id="alienPlayer"
                 autoplay="no"
                 toolbar="no"
                 loop="no"
                 width="640" height="360"
-                target="rtsp://127.0.0.1/buck.ts" /> <!--buck.ts-->
+                target="rtsp://10.0.0.4:8554/stay.mp3" /> <!-- CHANGE TO bunny.ts BEFORE DEMO-->
+              <!-- <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
+                id="alienPlayer"
+                autoplay="no"
+                toolbar="no"
+                loop="no"
+                width="640" height="360"
+                target="rtsp://127.0.0.1/buck.ts" /> --> <!--buck.ts-->
               <br />
-              <button id="play" type="button" class="btn btn-default" onclick="javascript:play();">
-                <span class="glyphicon glyphicon-play"></span>Play
-              </button>
-              <button id="pause" type="button" class="btn btn-default" onclick="javascript:pause();">
-                <span class="glyphicon glyphicon-pause"></span>Pause
-              </button>
-              <button id="stop" type="button" class="btn btn-default" onclick="javascript:stop();">
-                <span class="glyphicon glyphicon-stop"></span>Stop
-              </button>
+              <div id="play-ctrl" class="btn-group" >
+                <button id="play" type="button" class="btn btn-default" onclick="javascript:play();">
+                  <span class="glyphicon glyphicon-play"></span>Play
+                </button>
+                <button id="pause" type="button" class="btn btn-default" onclick="javascript:pause();">
+                  <span class="glyphicon glyphicon-pause"></span>Pause
+                </button>
+                <button id="stop" type="button" class="btn btn-default" onclick="javascript:stop();">
+                  <span class="glyphicon glyphicon-stop"></span>Stop
+                </button>
+              </div>
               <br /><br />
-              <button id="conn" type="button" class="btn btn-default" >Loading...</button>
+              <button id="conn" type="button" class="btn btn-default btn-lg" >Loading...</button>
               <button id="connect" type="button" class="btn btn-success" disabled onclick="javascript:doGET('connect');" hidden="true">
                 <span class="glyphicon glyphicon-flash"></span>Connect
               </button>

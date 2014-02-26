@@ -18,7 +18,7 @@ body {
     background:transparent;
 }
 
-#info, #connect, #disconnect {
+#info, #connect, #disconnect, #play-ctrl button {
 	display: none;
 }
 
