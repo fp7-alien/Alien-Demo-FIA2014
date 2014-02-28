@@ -124,6 +124,10 @@ function doGET(msg) {
       url: "http://10.0.0.200",
       timeout: 500
     });
+    $.ajax({
+      url: "http://192.168.0.200",
+      timeout: 500
+    });
     connect=true;
     buttonConnect.disabled=true;
     ////toggleDisable();
@@ -133,6 +137,10 @@ function doGET(msg) {
   } else if (msg=="disconnect") {
     $.ajax({
       url: "http://10.0.0.201",
+      timeout: 500
+    });
+    $.ajax({
+      url: "http://192.168.0.201",
       timeout: 500
     });
     buttonDisconnect.disabled=true;
