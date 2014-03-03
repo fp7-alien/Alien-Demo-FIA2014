@@ -36,38 +36,44 @@ from pox.lib.packet.arp import arp
 # Create a logger for this component
 log = core.getLogger()
 
+CLIENT_A_IP_MN = "192.168.0.3"
+SERVER_A_IP_MN = "192.168.0.4" 
+
 CLIENT_A_IP = "10.0.0.3"
 SERVER_A_IP = "10.0.0.4" 
 
 IP_TO_ENABLE_RTSP_TRANS = "10.0.0.200"
 IP_TO_DISABLE_RTSP_RTP_TRANS = "10.0.0.201"
+IP_TO_ENABLE_RTSP_TRANS_MN = "192.168.0.200"
+IP_TO_DISABLE_RTSP_RTP_TRANS_MN = "192.168.0.201"
 
-EZ1_EZ2_PORT = 3
-EZ1_EZ3_PORT = 1
-EZ1_CLIENT_A_PORT = 4
-EZ2_EZ1_PORT = 16
-EZ2_EZ3_PORT = 17
-EZ2_SERVER_A_PORT = 15
-EZ3_EZ2_PORT = 2
-EZ3_EZ1_PORT = 1
+#mininet configuration
+EZ1_EZ2_PORT_MN = 1
+EZ1_EZ3_PORT_MN = 2
+EZ1_CLIENT_A_PORT_MN = 4
+EZ2_EZ1_PORT_MN = 1
+EZ2_EZ3_PORT_MN = 2
+EZ2_SERVER_A_PORT_MN = 3
+EZ3_EZ2_PORT_MN = 2
+EZ3_EZ1_PORT_MN = 1
 
-'''
-#mininet - 3Vswitche:
-EZ1_EZ2_PORT = 1
-EZ1_EZ3_PORT = 2
-EZ1_CLIENT_A_PORT = 4
-EZ2_EZ1_PORT = 1
-EZ2_EZ3_PORT = 2
-EZ2_SERVER_A_PORT = 3
-EZ3_EZ2_PORT = 1
-EZ3_EZ1_PORT = 2
-'''
+#alien hardware testbed configuration
+EZPUT1_CAROS_PORT=1
+EZPUT1_EZPSNC_PORT=2
+EZPUT1_SRV_PORT=3
+EZPSNC_EZPUT1_PORT=1
+EZPSNC_EZPUT2_PORT=2
+CAROS_EZPUT2_PORT=1
+CAROS_EZPUT1_PORT=2
+EZPUT2_EZPSNC_PORT=1
+EZPUT2_CAROS_PORT=2
+EZPUT2_CLIENT_PORT=3
+
 
 '''
 # dataModel structure:
 dataModel 
   * dpid
-    status : Up/Down
     * match : action
     * proactive 
       * arp : action
@@ -76,53 +82,54 @@ dataModel
 '''
 
 dataModel = {
+  #mininet:
   "00-00-00-00-00-01":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZ1_EZ2_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZ1_CLIENT_A_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":8554, "outport":EZ1_EZ2_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":8554, "outport":EZ1_CLIENT_A_PORT_MN}
       ],
       "rtp" : [
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZ1_CLIENT_A_PORT}
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "dstport":[], "outport":EZ1_CLIENT_A_PORT_MN}
       ]
     }, 
     "proactive":{
       "arp": [      
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZ1_EZ3_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZ1_CLIENT_A_PORT} 
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x806, "outport":EZ1_EZ3_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x806, "outport":EZ1_CLIENT_A_PORT_MN} 
       ],
       "icmp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZ1_EZ3_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZ1_CLIENT_A_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x800, "outport":EZ1_EZ3_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x800, "outport":EZ1_CLIENT_A_PORT_MN}
       ],
       "web" :[
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZ1_EZ3_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZ1_CLIENT_A_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":80, "outport":EZ1_EZ3_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":80, "outport":EZ1_CLIENT_A_PORT_MN}
       ]
     }
   },
   "00-00-00-00-00-02":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZ2_SERVER_A_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZ2_EZ1_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":8554, "outport":EZ2_SERVER_A_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":8554, "outport":EZ2_EZ1_PORT_MN}
       ],
       "rtp" : [
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZ2_EZ1_PORT}
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "dstport":[], "outport":EZ2_EZ1_PORT_MN}
       ]
     }, 
     "proactive":{
       "arp": [      
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZ2_SERVER_A_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZ2_EZ3_PORT} 
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x806, "outport":EZ2_SERVER_A_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x806, "outport":EZ2_EZ3_PORT_MN} 
       ],
       "icmp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZ2_SERVER_A_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZ2_EZ3_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x800, "outport":EZ2_SERVER_A_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x800, "outport":EZ2_EZ3_PORT_MN}
       ],
       "web" :[
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZ2_SERVER_A_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZ2_EZ3_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":80, "outport":EZ2_SERVER_A_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":80, "outport":EZ2_EZ3_PORT_MN}
       ]
     }
   },
@@ -133,19 +140,115 @@ dataModel = {
     }, 
     "proactive":{
       "arp": [      
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZ3_EZ2_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZ3_EZ1_PORT} 
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x806, "outport":EZ3_EZ2_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x806, "outport":EZ3_EZ1_PORT_MN} 
       ],
       "icmp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZ3_EZ2_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZ3_EZ1_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "ethtype":0x800, "outport":EZ3_EZ2_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "ethtype":0x800, "outport":EZ3_EZ1_PORT_MN}
       ],
       "web" :[
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZ3_EZ2_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZ3_EZ1_PORT}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":80, "outport":EZ3_EZ2_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":80, "outport":EZ3_EZ1_PORT_MN}
       ]
     }
-  }
+  },
+  # --- ALIEN HW ---
+  "00-00-00-00-00-11":{
+    "match":{
+      "rtsp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPUT1_SRV_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPUT1_EZPSNC_PORT}
+      ],
+      "rtp" : [
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPUT1_EZPSNC_PORT}
+      ]
+    }, 
+    "proactive":{
+      "arp": [      
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPUT1_SRV_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPUT1_CAROS_PORT} 
+      ],
+      "icmp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPUT1_SRV_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPUT1_CAROS_PORT}
+      ],
+      "web" :[
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPUT1_SRV_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPUT1_CAROS_PORT}
+      ]
+    }
+  },
+  "00-00-00-00-00-12":{
+    "match":{
+      "rtsp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPUT2_EZPSNC_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPUT2_CLIENT_PORT}
+      ],
+      "rtp" : [
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPUT2_CLIENT_PORT}
+      ]
+    }, 
+    "proactive":{
+      "arp": [      
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPUT2_CLIENT_PORT} 
+      ],
+      "icmp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPUT2_CLIENT_PORT}
+      ],
+      "web" :[
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPUT2_CLIENT_PORT}
+      ]
+    }
+  },
+  "00-00-00-00-00-22":{
+    "match":{
+      "rtsp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPSNC_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPSNC_EZPUT2_PORT}
+      ],
+      "rtp" : [
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPSNC_EZPUT2_PORT}
+      ]
+    }, 
+    "proactive":{
+      "arp": [      
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPSNC_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPSNC_EZPUT2_PORT} 
+      ],
+      "icmp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPSNC_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPSNC_EZPUT2_PORT}
+      ],
+      "web" :[
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPSNC_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPSNC_EZPUT2_PORT}
+      ]
+    }
+  },
+  "00-00-00-00-00-33":{
+    "match":{
+      "rtsp": [],
+      "rtp" : []
+    }, 
+    "proactive":{
+      "arp": [      
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":CAROS_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":CAROS_EZPUT2_PORT} 
+      ],
+      "icmp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":CAROS_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":CAROS_EZPUT2_PORT}
+      ],
+      "web" :[
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":CAROS_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":CAROS_EZPUT2_PORT}
+      ]
+    }
+  }        
 }
 
 
@@ -206,7 +309,7 @@ class AlienComponent (object):
     log.debug("Received: %s ARP %s %s => %s", dpid_to_str(event.dpid), {arp.REQUEST:"request",arp.REPLY:"reply"}.get(a.opcode,'op:%i' % (a.opcode,)), str(a.protosrc), str(a.protodst))
 
     #set path for RTSP:
-    if (not self.RTSP_ENABLED)and(str(a.protodst) == IP_TO_ENABLE_RTSP_TRANS):
+    if (not self.RTSP_ENABLED)and((str(a.protodst) == IP_TO_ENABLE_RTSP_TRANS)or(str(a.protodst) == IP_TO_ENABLE_RTSP_TRANS_MN)):
       
       for dpid in dataModel.keys():
         log.debug("RTSP enabling. Installing Flow Modes for RTSP into switch %s"%dpid)
@@ -239,7 +342,7 @@ class AlienComponent (object):
         self.RTSP_ENABLED = True      
 
     # disable path for RTSP and RTP:
-    if (self.RTSP_ENABLED)and(str(a.protodst) == IP_TO_DISABLE_RTSP_RTP_TRANS):                                                                 
+    if (self.RTSP_ENABLED)and((str(a.protodst) == IP_TO_DISABLE_RTSP_RTP_TRANS)or(str(a.protodst) == IP_TO_DISABLE_RTSP_RTP_TRANS_MN)):                                                                 
       
       for dpid in dataModel.keys():
         log.debug("Deconfigure RTSP and RTP paths | dpid: %s"%dpid)
