@@ -48,31 +48,30 @@
 
     <div class="container">
         <div class="row">
-                      <div class="col-lg-2 col-sm-12"></div>
+            <div class="col-lg-2 col-sm-12"></div>
             <div class="col-lg-8 col-sm-12 text-center">
                 <img src="img/alien_logo.png" />
-                
             </div>
             <div class="col-lg-2 col-sm-12"></div>
         </div>
         <div class="row top-buffer">
-            <div class="col-lg-2 col-sm-12"></div>
-            <div class="col-lg-8 col-sm-12 text-center">
+            <!-- <div class="col-lg-2 col-sm-12"></div> -->
+            <div class="col-lg-6 col-sm-12 text-center">
 
+<!--               <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
+                id="alienPlayer"
+                autoplay="no"
+                toolbar="no"
+                loop="no"
+                width="640" height="360"
+                target="rtsp://192.168.0.4:8554/bunny.ts" /> --> <!-- CHANGE TO bunny.ts BEFORE DEMO-->
               <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
                 id="alienPlayer"
                 autoplay="no"
                 toolbar="no"
                 loop="no"
                 width="640" height="360"
-                target="rtsp://192.168.0.4:8554/bunny.ts" /> <!-- CHANGE TO bunny.ts BEFORE DEMO-->
-              <!-- <embed type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
-                id="alienPlayer"
-                autoplay="no"
-                toolbar="no"
-                loop="no"
-                width="640" height="360"
-                target="rtsp://127.0.0.1/buck.ts" /> --> <!--buck.ts-->
+                target="rtsp://127.0.0.1/buck.ts" /> <!--buck.ts-->
               <br />
               <div id="play-ctrl" class="btn-group" >
                 <button id="play" type="button" class="btn btn-default" onclick="javascript:play();">
@@ -97,7 +96,14 @@
               <span id="link-status" class="label label-primary" hidden="true">Loading...</span>
               <span id="info" class="label label-primary">Loading...</span>
             </div>
-            <div class="col-lg-2 col-sm-12"></div>
+            <div class="col-lg-6 col-sm-12">
+              <div id="cf7" class="shadow">
+                <img class='opaque' src="img/topology_slider/1.jpg" />
+                <img src="img/topology_slider/2.jpg" />
+                <img src="img/topology_slider/3.jpg" />
+                <img src="img/topology_slider/4.jpg" />
+              </div>
+            </div>
         </div>
     </div>
 
