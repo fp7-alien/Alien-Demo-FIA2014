@@ -4,10 +4,16 @@ Alien-Demo FIA 2014
 
 #### POX Component 
 - copy alien-demo1-pox.py to /pox/ext
-- run POX OF Controller: pox$>./pox.py alien-demo1-pox log --file=pox.log log.level --DEBUG
+- run POX OF Controller: 
+```bash
+pox$>./pox.py alien-demo1-pox log --file=pox.log log.level --DEBUG
+```
 
 #### Mininet network 
-- deploy Mininet: mininet$> sudo python alien_topo.py
+- deploy Mininet: 
+```bash
+mininet$> sudo python alien_topo.py
+```
 
 #### Demo1 web GUI
 - deploy: copy the whole "demo_website" to HTTP server host directory
