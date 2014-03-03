@@ -12,7 +12,7 @@ pox$>./pox.py alien-demo1-pox log --file=pox.log log.level --DEBUG
 #### Mininet network 
 - deploy Mininet: 
 ```bash
-mininet$> sudo python alien_topo.py
+mininet$> sudo python alien_mininet_topo_demo1.py
 ```
 
 #### Demo1 web GUI
