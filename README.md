@@ -6,7 +6,7 @@ Alien-Demo FIA 2014
 - copy alien-demo1-pox.py to /pox/ext
 - run POX OF Controller: 
 ```bash
-pox$>./pox.py alien-demo1-pox log --file=pox.log log.level --DEBUG
+pox$>./pox.py  web.webcore openflow.webservice alien-demo1-pox log --file=pox.log log.level --DEBUG log.color
 ```
 
 #### Mininet network 
