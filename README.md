@@ -8,3 +8,6 @@ Alien-Demo FIA 2014
 
 #### Mininet network 
 - deploy Mininet: mininet$> sudo python alien_topo.py
+
+#### Demo1 web GUI
+- deploy: copy the whole "demo_website" to HTTP server host directory
