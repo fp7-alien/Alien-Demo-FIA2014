@@ -34,8 +34,9 @@ body {
   position:relative;
   height:360px; /*281px;*/
   width:450px;
-  margin:0 auto 10px;
+  /*margin:0 0 10px 0;*/
 }
+
 #cf7 img {
   position:absolute;
   left:0;
