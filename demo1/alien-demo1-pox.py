@@ -47,6 +47,8 @@ IP_TO_DISABLE_RTSP_RTP_TRANS = "10.0.0.201"
 IP_TO_ENABLE_RTSP_TRANS_MN = "192.168.0.200"
 IP_TO_DISABLE_RTSP_RTP_TRANS_MN = "192.168.0.201"
 
+RTSPPORT = 554
+
 #mininet configuration
 EZ1_EZ2_PORT_MN = 1
 EZ1_EZ3_PORT_MN = 2
@@ -68,8 +70,6 @@ CAROS_EZPUT1_PORT=2
 EZPUT2_EZPSNC_PORT=1
 EZPUT2_CAROS_PORT=2
 EZPUT2_CLIENT_PORT=3
-
-
 '''
 # dataModel structure:
 dataModel 
@@ -86,8 +86,8 @@ dataModel = {
   "00-00-00-00-00-01":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":8554, "outport":EZ1_EZ2_PORT_MN},
-        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":8554, "outport":EZ1_CLIENT_A_PORT_MN}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":RTSPPORT, "outport":EZ1_EZ2_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":RTSPPORT, "outport":EZ1_CLIENT_A_PORT_MN}
       ],
       "rtp" : [
         {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "dstport":[], "outport":EZ1_CLIENT_A_PORT_MN}
@@ -111,8 +111,8 @@ dataModel = {
   "00-00-00-00-00-02":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":8554, "outport":EZ2_SERVER_A_PORT_MN},
-        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":8554, "outport":EZ2_EZ1_PORT_MN}
+        {"ipsrc":CLIENT_A_IP_MN, "ipdst":SERVER_A_IP_MN, "dstport":RTSPPORT, "outport":EZ2_SERVER_A_PORT_MN},
+        {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "srcport":RTSPPORT, "outport":EZ2_EZ1_PORT_MN}
       ],
       "rtp" : [
         {"ipsrc":SERVER_A_IP_MN, "ipdst":CLIENT_A_IP_MN, "dstport":[], "outport":EZ2_EZ1_PORT_MN}
@@ -157,33 +157,33 @@ dataModel = {
   "00-00-00-00-00-11":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPUT1_SRV_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPUT1_EZPSNC_PORT}
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":RTSPPORT, "outport":EZPUT1_SRV_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":RTSPPORT, "outport":EZPUT1_CAROS_PORT}
       ],
       "rtp" : [
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPUT1_EZPSNC_PORT}
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPUT1_CAROS_PORT}
       ]
     }, 
     "proactive":{
       "arp": [      
         {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPUT1_SRV_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPUT1_CAROS_PORT} 
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPUT1_EZPSNC_PORT} 
       ],
       "icmp": [
         {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPUT1_SRV_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPUT1_CAROS_PORT}
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPUT1_EZPSNC_PORT}
       ],
       "web" :[
         {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPUT1_SRV_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPUT1_CAROS_PORT}
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPUT1_EZPSNC_PORT}
       ]
     }
   },
   "00-00-00-00-00-12":{
     "match":{
       "rtsp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPUT2_EZPSNC_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPUT2_CLIENT_PORT}
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":RTSPPORT, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":RTSPPORT, "outport":EZPUT2_CLIENT_PORT}
       ],
       "rtp" : [
         {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPUT2_CLIENT_PORT}
@@ -191,28 +191,23 @@ dataModel = {
     }, 
     "proactive":{
       "arp": [      
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x806, "outport":EZPUT2_EZPSNC_PORT},
         {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x806, "outport":EZPUT2_CLIENT_PORT} 
       ],
       "icmp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "ethtype":0x800, "outport":EZPUT2_EZPSNC_PORT},
         {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "ethtype":0x800, "outport":EZPUT2_CLIENT_PORT}
       ],
       "web" :[
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPUT2_CAROS_PORT},
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":80, "outport":EZPUT2_EZPSNC_PORT},
         {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":EZPUT2_CLIENT_PORT}
       ]
     }
   },
   "00-00-00-00-00-22":{
     "match":{
-      "rtsp": [
-        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":8554, "outport":EZPSNC_EZPUT1_PORT},
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":8554, "outport":EZPSNC_EZPUT2_PORT}
-      ],
-      "rtp" : [
-        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":EZPSNC_EZPUT2_PORT}
-      ]
+      "rtsp": [],
+      "rtp" : []
     }, 
     "proactive":{
       "arp": [      
@@ -231,8 +226,13 @@ dataModel = {
   },
   "00-00-00-00-00-33":{
     "match":{
-      "rtsp": [],
-      "rtp" : []
+      "rtsp": [
+        {"ipsrc":CLIENT_A_IP, "ipdst":SERVER_A_IP, "dstport":RTSPPORT, "outport":CAROS_EZPUT1_PORT},
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":RTSPPORT, "outport":CAROS_EZPUT2_PORT}
+      ],
+      "rtp" : [
+        {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "dstport":[], "outport":CAROS_EZPUT2_PORT}
+      ]
     }, 
     "proactive":{
       "arp": [      
@@ -248,7 +248,7 @@ dataModel = {
         {"ipsrc":SERVER_A_IP, "ipdst":CLIENT_A_IP, "srcport":80, "outport":CAROS_EZPUT2_PORT}
       ]
     }
-  }        
+  } 
 }
 
 
@@ -279,7 +279,7 @@ class AlienComponent (object):
     msg = of.ofp_flow_mod(command=of.OFPFC_DELETE)
     #log.debug("delete Massage:%s ", msg.show())
     self.connection[dpid_to_str(event.dpid)].send(msg)
-    log.debug("Clearing all flows from %s.",dpid_to_str(event.dpid))
+    log.info("Clearing all flows from %s.",dpid_to_str(event.dpid))
 
     self.installFlowModProactive(dpid_to_str(event.dpid))   
 
@@ -312,14 +312,14 @@ class AlienComponent (object):
     if (not self.RTSP_ENABLED)and((str(a.protodst) == IP_TO_ENABLE_RTSP_TRANS)or(str(a.protodst) == IP_TO_ENABLE_RTSP_TRANS_MN)):
       
       for dpid in dataModel.keys():
-        log.debug("RTSP enabling. Installing Flow Modes for RTSP into switch %s"%dpid)
+        log.info("RTSP enabling. Installing Flow Modes for RTSP into switch %s"%dpid)
 
         if not dpid in self.connection:
           log.warning("Switch %s not connected to POX"%dpid)
           continue
 
         for i in dataModel[dpid]["match"]["rtsp"]:
-          if "dstport" in i:
+          if ("dstport" in i)and(i["dstport"]!=""):
             self.connection[dpid].send( of.ofp_flow_mod( action=of.ofp_action_output( port=i["outport"] ),
                                                 priority=1,
                                                 match=of.ofp_match(nw_proto = pkt.ipv4.TCP_PROTOCOL,
@@ -345,7 +345,7 @@ class AlienComponent (object):
     if (self.RTSP_ENABLED)and((str(a.protodst) == IP_TO_DISABLE_RTSP_RTP_TRANS)or(str(a.protodst) == IP_TO_DISABLE_RTSP_RTP_TRANS_MN)):                                                                 
       
       for dpid in dataModel.keys():
-        log.debug("Deconfigure RTSP and RTP paths | dpid: %s"%dpid)
+        log.info("Deconfigure RTSP and RTP paths | dpid: %s"%dpid)
         
         if not dpid in self.connection:
           log.warning("Switch %s not connected to POX"%dpid)
@@ -422,7 +422,7 @@ class AlienComponent (object):
       #print "dataModel: %s"%dataModel
 
   def installFlowModProactive (self, dpid):
-    log.debug("FlowMode installing - proactive mode | switch dpid: %s",dpid)
+    log.info("FlowMode installing - proactive mode | switch dpid: %s",dpid)
     
     #arp:
     for i in dataModel[dpid]["proactive"]["arp"]:
