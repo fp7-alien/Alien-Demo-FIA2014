@@ -28,6 +28,7 @@ function enableConn() {
 }
 
 function play() {
+  topoSlider(2);  // [TOPO-SLIDER] Show playing (RTSP)
   vlc.playlist.play();
   state="start";
 }
@@ -47,7 +48,7 @@ function stop() {
 }
 
 function checkState() {
-  vlc.playlist.play();
+  //vlc.playlist.play(); <-- FIXED
   state="self-start"
 }
 
@@ -63,12 +64,21 @@ function showDisconnect() {
   $('#conn').attr("onclick","javascript:doGET('disconnect');");
 }
 
+// Slider //
+function topoSlider(num) {
+  $("#cf7 img").removeClass("opaque");
+  $("#cf7 img").eq(num).addClass("opaque");
+}
+//--------//
+
 $(document).ready(function () {
             start_timer = setInterval(function () {
               var s = vlc.input.state;
               infoWindow.innerHTML=s+" - "+state;
-              if (s=='3' && state=="self-start") {  // link up -> pause
-                vlc.playlist.togglePause();
+              //if (s=='3' && state=="self-start") {  // link up -> pause
+              if ((s=='3' && state=="self-start") || (connect==true) ) {  // link up -> pause
+                topoSlider(1);  // [TOPO-SLIDER] Show connected (RTP)
+                //vlc.playlist.togglePause(); <-- FIXED
                 ////toggleDisable();
                 togglePlayCtrl();
                 enableConn();
@@ -79,7 +89,9 @@ $(document).ready(function () {
                 state="pause";
                 buttonDisconnect.disabled=false;
                 buttonConnect.disabled=true;
+                connect=false;
               } else if (s=="7" && state=="self-start" && disconnect==false) { // link down -> check again
+                topoSlider(0);  // [TOPO-SLIDER] Show disconnected
                 buttonDisconnect.disabled=true;
                 if (connect==true) {
                   buttonConnect.disabled=true;
@@ -100,7 +112,20 @@ $(document).ready(function () {
                   $('#link-status').text("Link down");
                 }
                 checkState();
-              } else if (s=="6" && disconnect==true) {  // disconnecting -> waiting for player error
+              } else if (state=="self-start") {
+                showConnect();
+                ////toggleDisable();
+                enableConn();
+                infoWindow.setAttribute("class", "label label-danger");
+                $('#link-status').attr("class","label label-danger");
+                $('#link-status').text("Link down");
+                disconnect=false;
+                buttonDisconnect.disabled=true;
+                buttonConnect.disabled=false;
+
+              } else if ((s=="6" && disconnect==true) || (disconnect==true)) {  // disconnecting -> waiting for player error
+              //} else if (disconnect==true) {  // disconnecting -> stop & show disconnect
+                topoSlider(0);  // [TOPO-SLIDER] Show disconnected
                 vlc.playlist.stop();
                 togglePlayCtrl();
                 showConnect();
@@ -158,5 +183,6 @@ $(document).keydown(function(event) {
     $( "#disconnect" ).toggle();
   }
 });
+
 
 checkState();
