@@ -30,8 +30,8 @@ import pox.lib.revent as revent               # Event library
 import pox.lib.recoco as recoco               # Multitasking library
 from pox.lib.util import dpid_to_str
 from pox.lib.packet.arp import arp
-
-
+from pox.lib.packet.ethernet import ethernet
+from pox.lib.addresses import IPAddr, EthAddr
 
 # Create a logger for this component
 log = core.getLogger()
@@ -46,6 +46,10 @@ IP_TO_ENABLE_RTSP_TRANS = "10.0.0.200"
 IP_TO_DISABLE_RTSP_RTP_TRANS = "10.0.0.201"
 IP_TO_ENABLE_RTSP_TRANS_MN = "192.168.0.200"
 IP_TO_DISABLE_RTSP_RTP_TRANS_MN = "192.168.0.201"
+
+dpid_where_h1_connected = "00-00-00-00-00-01"
+h1_ip_address_200 = "10.0.0.200"
+h1_ip_address_201 = "10.0.0.201"
 
 RTSPPORT = 554
 
@@ -270,7 +274,7 @@ class AlienComponent (object):
     log.info("Switch %s has come up.", dpid_to_str(event.dpid))
     
     if not dpid_to_str(event.dpid) in dataModel:
-      log.warning("dpid not in dataModel")  
+      log.warning("dpid: %s not in dataModel", hex(event.dpid))  
     #log.debug("dataModel: %s"%dataModel)
 
     self.connection[dpid_to_str(event.dpid)] = event.connection
@@ -288,10 +292,11 @@ class AlienComponent (object):
     log.debug("bye ALIENs!")
 
   def _handle_PacketIn (self, event):
+    log.debug("in PacketIn handler")
     packet = event.parsed
     dpid = event.dpid
     port = event.port
-    log.debug("PacketIn received: %s | dpid: %s | port: %s | "%(packet, dpid, port))
+    log.debug("PacketIn received: %s | dpid: %s | port: %s | "%(packet, hex(dpid), port))
 
     protocol_arp = packet.find('arp')
     if protocol_arp: 
@@ -402,7 +407,14 @@ class AlienComponent (object):
         portUDP = protocol_udp.dstport
 
         for i in dataModel[dpid_to_str(dpid)]["match"]["rtp"]:
-          if (i["ipsrc"]==event.parsed.payload.srcip)and(i["ipdst"]==event.parsed.payload.dstip):
+
+          #because of pox errors:
+          #getattr(a, 'property', 'default value')
+          srcip = getattr(event.parsed.payload, 'srcip', '')         
+          dstip = getattr(event.parsed.payload, 'dstip', '')
+          log.debug("UDP | srcip: %s | dstip: %s"%(srcip, dstip))
+
+          if (i["ipsrc"]==srcip)and(i["ipdst"]==dstip):
             if portUDP not in i["dstport"]:
               i["dstport"].append(portUDP)
               self.connection[dpid_to_str(dpid)].send( of.ofp_flow_mod( action=of.ofp_action_output( port=i["outport"] ),
